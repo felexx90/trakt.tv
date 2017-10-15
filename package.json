@@ -1,8 +1,13 @@
 {
-    "name": "trakt.tv",
+    "name": "react-native-trakt.tv",
     "version": "6.0.1",
-    "description": "Interact with Trakt.tv API in NodeJS",
-    "keywords": ["trakt", "api", "wrapper", "node"],
+    "description": "Interact with Trakt.tv API in React Native",
+    "keywords": [
+        "trakt",
+        "api",
+        "wrapper",
+        "react-native"
+    ],
     "main": "trakt.js",
     "author": "Jean van Kasteel",
     "license": "MIT",
@@ -11,10 +16,11 @@
         "url": "https://github.com/vankasteelj/trakt.tv"
     },
     "bugs": {
-        "url": "https://github.com/vankasteelj/trakt.tv/issues"
+        "url": "https://github.com/vankasteelj/trakt.tv"
     },
     "dependencies": {
         "got": "7.x.x",
+        "react-native-randombytes": "^3.0.0",
         "sanitizer": "0.x.x"
     },
     "scripts": {

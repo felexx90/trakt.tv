@@ -2,7 +2,7 @@
 
 // requirejs modules
 const got = require('got');
-const crypto = require('crypto');
+const randomBytes = require('react-native-randombytes');
 const methods = require('./methods.json');
 const sanitizer = require('sanitizer').sanitize;
 const pkg = require('./package.json');
@@ -10,7 +10,7 @@ const pkg = require('./package.json');
 // default settings
 const defaultUrl = 'https://api.trakt.tv';
 const redirectUrn = 'urn:ietf:wg:oauth:2.0:oob';
-const defaultUa = `${pkg.name}/${pkg.version} (NodeJS; +${pkg.repository.url})`;
+const defaultUa = `${pkg.name}/${pkg.version} (React-Native; +${pkg.repository.url})`;
 
 module.exports = class Trakt {
     constructor(settings = {}, debug) {
@@ -92,7 +92,7 @@ module.exports = class Trakt {
 
             return this._sanitize(body);
         }).catch(error => {
-            throw (error.response && error.response.statusCode == 401) ? Error(error.response.headers['www-authenticate']) : error;
+            throw (error.response && error.response.statusCode === 401) ? Error(error.response.headers['www-authenticate']) : error;
         });
     }
 
@@ -128,7 +128,7 @@ module.exports = class Trakt {
 
         this._debug(req);
         return got(req.url, req).then(response => this._sanitize(JSON.parse(response.body))).catch(error => {
-            throw (error.response && error.response.statusCode == 401) ? Error(error.response.headers['www-authenticate']) : error;
+            throw (error.response && error.response.statusCode === 401) ? Error(error.response.headers['www-authenticate']) : error;
         });
     }
 
@@ -153,7 +153,7 @@ module.exports = class Trakt {
         const pathPart = method.url.split('?')[0];
         const pathParams = pathPart.split('/');
         for (let k in pathParams) {
-            if (pathParams[k][0] != ':') {
+            if (pathParams[k][0] !== ':') {
                 pathParts.push(pathParams[k]);
             } else {
                 const param = params[pathParams[k].substr(1)];
@@ -280,7 +280,7 @@ module.exports = class Trakt {
 
     // Get authentication url for browsers
     get_url() {
-        this._authentication.state = crypto.randomBytes(6).toString('hex');
+        this._authentication.state = randomBytes(6).toString('hex');
         // Replace 'api' from the api_url to get the top level trakt domain
         const base_url = this._settings.endpoint.replace(/api\W/, '');
         return `${base_url}/oauth/authorize?response_type=code&client_id=${this._settings.client_id}&redirect_uri=${this._settings.redirect_uri}&state=${this._authentication.state}`;
@@ -288,7 +288,7 @@ module.exports = class Trakt {
 
     // Verify code; optional state
     exchange_code(code, state) {
-        if (state && state != this._authentication.state) throw Error('Invalid CSRF (State)');
+        if (state && state !== this._authentication.state) throw Error('Invalid CSRF (State)');
 
         return this._exchange({
             code: code,
