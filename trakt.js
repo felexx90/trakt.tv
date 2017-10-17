@@ -227,9 +227,12 @@ export default class Trakt {
         'Content-Type': 'application/json',
         'trakt-api-version': '2',
         'trakt-api-key': this._settings.client_id
-      },
-      data: (method.data ? Object.assign({}, method.data) : {})
+      }
     };
+
+    if (method.data) {
+      req.data = Object.assign({}, method.data);
+    }
 
     if (method.opts['auth'] &&
       this._authentication.access_token) req.headers['Authorization'] = `Bearer ${this._authentication.access_token}`;
