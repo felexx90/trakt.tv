@@ -52,8 +52,9 @@ export default class Trakt {
         };
       })();
     }
-
-    this._debug(`Trakt.tv: module loaded, as ${this._settings.useragent}`);
+    if (this._settings) {
+      this._debug(`Trakt.tv: module loaded, as ${this._settings.useragent}`);
+    }
   }
 
   // Initialize plugins
