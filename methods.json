@@ -90,7 +90,7 @@
         },
         "method": "POST",
         "url": "/checkin",
-        "body": {
+        "data": {
             "movie": null,
             "episode": null,
             "sharing": null,
@@ -122,7 +122,7 @@
         },
         "method": "POST",
         "url": "/comments",
-        "body": {
+        "data": {
             "movie": null,
             "show": null,
             "season": null,
@@ -146,7 +146,7 @@
         },
         "method": "PUT",
         "url": "/comments/:id",
-        "body": {
+        "data": {
             "comment": null,
             "spoiler": null,
             "review": null
@@ -177,7 +177,7 @@
         },
         "method": "POST",
         "url": "/comments/:id/replies",
-        "body": {
+        "data": {
             "comment": null,
             "spoiler": null
 
@@ -425,7 +425,7 @@
         },
         "method": "POST",
         "url": "/scrobble/start",
-        "body": {
+        "data": {
             "movie": null,
             "episode": null,
             "progress": null,
@@ -440,7 +440,7 @@
         },
         "method": "POST",
         "url": "/scrobble/pause",
-        "body": {
+        "data": {
             "movie": null,
             "episode": null,
             "progress": null,
@@ -455,7 +455,7 @@
         },
         "method": "POST",
         "url": "/scrobble/stop",
-        "body": {
+        "data": {
             "movie": null,
             "episode": null,
             "progress": null,
@@ -786,7 +786,7 @@
         },
         "method": "POST",
         "url": "/sync/collection",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -800,7 +800,7 @@
         },
         "method": "POST",
         "url": "/sync/collection/remove",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -832,7 +832,7 @@
         },
         "method": "POST",
         "url": "/sync/history",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -845,7 +845,7 @@
         },
         "method": "POST",
         "url": "/sync/history/remove",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null,
@@ -868,7 +868,7 @@
         },
         "method": "POST",
         "url": "/sync/ratings",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -882,7 +882,7 @@
         },
         "method": "POST",
         "url": "/sync/ratings/remove",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -906,7 +906,7 @@
         },
         "method": "POST",
         "url": "/sync/watchlist",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -920,7 +920,7 @@
         },
         "method": "POST",
         "url": "/sync/watchlist/remove",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -977,7 +977,7 @@
         },
         "method": "POST",
         "url": "/users/hidden/:section",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -990,7 +990,7 @@
         },
         "method": "POST",
         "url": "/users/hidden/:section/remove",
-        "body": {
+        "data": {
             "movies": null,
             "shows": null,
             "episodes": null
@@ -1048,7 +1048,7 @@
         },
         "method": "POST",
         "url": "/users/:username/lists",
-        "body": {
+        "data": {
             "name": null,
             "description": null,
             "privacy": null,
@@ -1071,7 +1071,7 @@
         },
         "method": "PUT",
         "url": "/users/:username/lists/:id",
-        "body": {
+        "data": {
             "name": null,
             "description": null,
             "privacy": null,

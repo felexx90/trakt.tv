@@ -1,7 +1,7 @@
 'use strict';
 
 // requirejs modules
-const got = require('got');
+const axios = require('axios');
 const randomBytes = require('react-native-randombytes');
 const methods = require('./methods.json');
 const sanitizer = require('sanitizer').sanitize;
@@ -79,18 +79,18 @@ module.exports = class Trakt {
                 'User-Agent': this._settings.useragent,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(str)
+            data: JSON.stringify(str)
         };
 
         this._debug(req);
-        return got(req.url, req).then(response => {
-            const body = JSON.parse(response.body);
+        return axios(req).then(response => {
+            const data = response.data;
 
-            this._authentication.refresh_token = body.refresh_token;
-            this._authentication.access_token = body.access_token;
-            this._authentication.expires = (body.created_at + body.expires_in) * 1000;
+            this._authentication.refresh_token = data.refresh_token;
+            this._authentication.access_token = data.access_token;
+            this._authentication.expires = (data.created_at + data.expires_in) * 1000;
 
-            return this._sanitize(body);
+            return this._sanitize(data);
         }).catch(error => {
             throw (error.response && error.response.statusCode === 401) ? Error(error.response.headers['www-authenticate']) : error;
         });
@@ -108,10 +108,10 @@ module.exports = class Trakt {
                 'trakt-api-version': '2',
                 'trakt-api-key': this._settings.client_id
             },
-            body: `token=[${this._authentication.access_token}]`
+            data: `token=[${this._authentication.access_token}]`
         };
         this._debug(req);
-        got(req.url, req);
+        axios(req);
     }
 
     // Get code to paste on login screen
@@ -123,11 +123,11 @@ module.exports = class Trakt {
                 'User-Agent': this._settings.useragent,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(str)
+            data: JSON.stringify(str)
         };
 
         this._debug(req);
-        return got(req.url, req).then(response => this._sanitize(JSON.parse(response.body))).catch(error => {
+        return axios(req).then(response => this._sanitize(response.data)).catch(error => {
             throw (error.response && error.response.statusCode === 401) ? Error(error.response.headers['www-authenticate']) : error;
         });
     }
@@ -203,29 +203,29 @@ module.exports = class Trakt {
                 'trakt-api-version': '2',
                 'trakt-api-key': this._settings.client_id
             },
-            body: (method.body ? Object.assign({}, method.body) : {})
+            data: (method.data ? Object.assign({}, method.data) : {})
         };
 
         if (method.opts['auth'] && this._authentication.access_token) req.headers['Authorization'] = `Bearer ${this._authentication.access_token}`;
 
         for (let k in params) {
-            if (k in req.body) req.body[k] = params[k];
+            if (k in req.data) req.data[k] = params[k];
         }
-        for (let k in req.body) {
-            if (!req.body[k]) delete req.body[k];
+        for (let k in req.data) {
+            if (!req.data[k]) delete req.data[k];
         }
 
-        req.body = JSON.stringify(req.body);
+        req.data = JSON.stringify(req.data);
 
         this._debug(req);
-        return got(req.url, req).then(response => this._parseResponse(method, params, response));
+        return axios(req).then(response => this._parseResponse(method, params, response));
     }
 
     // Parse trakt response: pagination & stuff
     _parseResponse (method, params, response) {
-        if (!response.body) return response.body;
+        if (!response.data) return response.data;
 
-        const data = JSON.parse(response.body);
+        const data = JSON.parse(response.data);
         let parsed = data;
 
         if ((params && params.pagination) || this._settings.pagination) {
@@ -323,13 +323,13 @@ module.exports = class Trakt {
                     code: poll.device_code,
                     client_id: this._settings.client_id,
                     client_secret: this._settings.client_secret
-                }, 'token').then(body => {
-                    this._authentication.refresh_token = body.refresh_token;
-                    this._authentication.access_token = body.access_token;
-                    this._authentication.expires = Date.now() + (body.expires_in * 1000); // Epoch in milliseconds
+                }, 'token').then(data => {
+                    this._authentication.refresh_token = data.refresh_token;
+                    this._authentication.access_token = data.access_token;
+                    this._authentication.expires = Date.now() + (data.expires_in * 1000); // Epoch in milliseconds
 
                     clearInterval(polling);
-                    resolve(body);
+                    resolve(data);
                 }).catch(error => {
                     // do nothing on 400
                     if (error.response && error.response.statusCode === 400) return;
