@@ -255,7 +255,7 @@ export default class Trakt {
   _parseResponse(method, params, response) {
     if (!response.data) return response.data;
 
-    const data = JSON.parse(response.data);
+    const data = response.data;
     let parsed = data;
 
     if ((params && params.pagination) || this._settings.pagination) {
