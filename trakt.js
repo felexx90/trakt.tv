@@ -237,14 +237,15 @@ export default class Trakt {
     if (method.opts['auth'] &&
       this._authentication.access_token) req.headers['Authorization'] = `Bearer ${this._authentication.access_token}`;
 
-    for (let k in params) {
-      if (k in req.data) req.data[k] = params[k];
+    if(req.data){
+      for (let k in params) {
+        if (k in req.data) req.data[k] = params[k];
+      }
+      for (let k in req.data) {
+        if (!req.data[k]) delete req.data[k];
+      }
+      req.data = JSON.stringify(req.data);
     }
-    for (let k in req.data) {
-      if (!req.data[k]) delete req.data[k];
-    }
-
-    req.data = JSON.stringify(req.data);
 
     this._debug(req);
     return axios(req).
