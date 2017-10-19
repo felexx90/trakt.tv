@@ -315,7 +315,7 @@ export default class Trakt {
 
   // Get authentication url for browsers
   get_url() {
-    UUIDGenerator.getRandomUUID().then((uuid) => {
+    return UUIDGenerator.getRandomUUID().then((uuid) => {
       this._authentication.state = uuid;
       // Replace 'api' from the api_url to get the top level trakt domain
       const base_url = this._settings.endpoint.replace(/api\W/, '');
