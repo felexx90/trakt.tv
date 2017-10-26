@@ -1,7 +1,7 @@
 'use strict';
 
 // requirejs modules
-import axios from 'axios';
+import axios, {CancelToken} from 'axios';
 import UUIDGenerator from 'react-native-uuid-generator';
 import methods from './methods.json';
 import { sanitize } from 'sanitizer';
@@ -47,8 +47,8 @@ export default class Trakt {
 
       tmp[name] = (() => {
         const method = methods[url]; // closure forces copy
-        return (params) => {
-          return this._call(method, params);
+        return (params,cancel) => {
+          return this._call(method, params,cancel);
         };
       })();
     }
@@ -215,12 +215,13 @@ export default class Trakt {
   }
 
   // Parse methods then hit trakt
-  _call(method, params) {
+  _call(method, params, cancel='cancel') {
     if (method.opts['auth'] === true && (!this._authentication.access_token ||
         !this._settings.client_secret)) throw Error('OAuth required');
-
+    const source = CancelToken.source()
     const req = {
       method: method.method,
+      cancelToken: source.token,
       url: this._parse(method, params),
       headers: {
         'User-Agent': this._settings.useragent,
@@ -248,8 +249,10 @@ export default class Trakt {
     }
 
     this._debug(req);
-    return axios(req).
+    const promise=axios(req).
       then(response => this._parseResponse(method, params, response));
+    promise[cancel]=()=>source.cancel();
+    return promise;
   }
 
   // Parse trakt response: pagination & stuff
